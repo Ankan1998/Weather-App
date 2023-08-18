@@ -4,9 +4,7 @@ class MiniCapsuleWidget extends StatelessWidget {
   final String imgPath;
   final String txt1;
   final String txt2;
-  const MiniCapsuleWidget(
-      {Key? key, required this.imgPath, required this.txt1, required this.txt2})
-      : super(key: key);
+  const MiniCapsuleWidget({Key? key, required this.imgPath, required this.txt1, required this.txt2}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +14,19 @@ class MiniCapsuleWidget extends StatelessWidget {
           Center(
             child: Image.asset(
               imgPath,
-              width: 24,
+              width: 38,
             ),
+          ),
+          SizedBox(
+            height: 4,
           ),
           Text(
             txt1,
-            style: TextStyle(fontSize: 14, color: Colors.white),
+            style: TextStyle(fontSize: 16, color: Colors.white),
           ),
           Text(
             txt2,
-            style: TextStyle(fontSize: 12, color: Colors.white54),
+            style: TextStyle(fontSize: 14, color: Colors.white54),
           )
         ],
       ),

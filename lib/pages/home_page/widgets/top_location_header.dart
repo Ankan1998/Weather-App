@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TopLocationHeader extends StatelessWidget {
+  final String cityName;
+  final VoidCallback onPressed;
   const TopLocationHeader({
     super.key,
+    required this.cityName,
+    required this.onPressed,
   });
 
   @override
@@ -11,22 +15,27 @@ class TopLocationHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white,
-                width: 1.0,
+          InkWell(
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.0,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.refresh,
+                  size: 16,
+                  color: Colors.white,
+                ),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.refresh,
-                size: 16,
-                color: Colors.white,
-              ),
-            ),
+            onTap: () {
+              onPressed();
+            },
           ),
           Expanded(
             child: Row(
@@ -40,11 +49,8 @@ class TopLocationHeader extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  "Minsk",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600),
+                  cityName,
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

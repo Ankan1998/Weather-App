@@ -1,12 +1,18 @@
 class CurrentWeatherViewModel {
-  final String cityName;
-  final int temp;
-  final String weatherCondition;
-  final int windSpeed;
-  final int humidity;
-  final int pressure;
-  final DateTime dtNow;
+  String cityName;
+  int temp;
+  String weatherCondition;
+  double windSpeed;
+  int humidity;
+  int pressure;
+  DateTime dtNow;
 
-  CurrentWeatherViewModel(this.cityName, this.temp, this.weatherCondition,
-      this.windSpeed, this.humidity, this.pressure, this.dtNow);
+  CurrentWeatherViewModel(
+      {required this.cityName,
+      required this.temp,
+      required this.weatherCondition,
+      required this.windSpeed,
+      required this.humidity,
+      required this.pressure,
+      required this.dtNow});
 }

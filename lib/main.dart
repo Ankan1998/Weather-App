@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/pages/home_page/home_page.dart';
+import 'package:weather_app/pages/home_page/providers/current_weather_provider.dart';
 import 'package:weather_app/pages/lock_page/lock_page.dart';
+import 'package:weather_app/pages/lock_page/providers/lock_page_provider.dart';
 import 'package:weather_app/utils/app_colors.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LockPageProvider()),
+        ChangeNotifierProvider(create: (_) => CurrentWeatherProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,8 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Roboto',
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: AppColors.xBackgroundColor),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.xBackgroundColor),
         useMaterial3: true,
       ),
       home: const LockPage(),

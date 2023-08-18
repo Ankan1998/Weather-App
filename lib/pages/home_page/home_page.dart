@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/current_weather_view_model.dart';
+import 'package:weather_app/models/ui_state_model.dart';
+import 'package:weather_app/pages/home_page/providers/current_weather_provider.dart';
 import 'package:weather_app/pages/home_page/widgets/mini_capsule_bottom_widget.dart';
 import 'package:weather_app/pages/home_page/widgets/mini_capsule_widget.dart';
 import 'package:weather_app/pages/home_page/widgets/top_location_header.dart';
 import 'package:weather_app/utils/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/utils/helpers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +17,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    Provider.of<CurrentWeatherProvider>(context, listen: false).getCurrentWeather();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,51 +38,71 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 1,
                       ),
-                      Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
+                      Consumer<CurrentWeatherProvider>(builder: (context, provider, child) {
+                        if (provider.uiStateModel.states == UiStates.loading) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (provider.uiStateModel.states == UiStates.success) {
+                          return Center(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TopLocationHeader(
+                                  cityName: provider.currentWeatherViewModel.cityName,
+                                  onPressed: () {
+                                    Provider.of<CurrentWeatherProvider>(context, listen: false).getCurrentWeather();
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                ThreeDImageWidget(
+                                  imgPath: provider.currentWeatherViewModel.weatherCondition,
+                                ),
+                                TemperatureWidget(
+                                  temp: provider.currentWeatherViewModel.temp,
+                                  weatherCondition: provider.currentWeatherViewModel.weatherCondition,
+                                  dateTime: provider.currentWeatherViewModel.dtNow,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 54.0, vertical: 28),
+                                  child: Divider(
+                                    height: 1,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 54.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      MiniCapsuleWidget(
+                                          imgPath: 'assets/weather/snow.png',
+                                          txt1: provider.currentWeatherViewModel.windSpeed.toString(),
+                                          txt2: "Wind"),
+                                      MiniCapsuleWidget(
+                                          imgPath: 'assets/weather/snow.png',
+                                          txt1: provider.currentWeatherViewModel.humidity.toString(),
+                                          txt2: "Humidity"),
+                                      MiniCapsuleWidget(
+                                          imgPath: 'assets/weather/snow.png',
+                                          txt1: provider.currentWeatherViewModel.pressure.toString(),
+                                          txt2: "Pressure")
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            TopLocationHeader(),
-                            SizedBox(
-                              height: 38,
-                            ),
-                            ThreeDImageWidget(),
-                            TemperatureWidget(),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 54.0, vertical: 28),
-                              child: Divider(
-                                height: 1,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 54.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MiniCapsuleWidget(
-                                      imgPath: 'assets/weather/snow.png',
-                                      txt1: "13 km/h",
-                                      txt2: "wind"),
-                                  MiniCapsuleWidget(
-                                      imgPath: 'assets/weather/snow.png',
-                                      txt1: "13 km/h",
-                                      txt2: "wind"),
-                                  MiniCapsuleWidget(
-                                      imgPath: 'assets/weather/snow.png',
-                                      txt1: "13 km/h",
-                                      txt2: "wind")
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      )
+                          );
+                        } else {
+                          return Center(
+                            child: Text("Something Went wrong"),
+                          );
+                        }
+                      })
                     ],
                   ),
                   decoration: BoxDecoration(
@@ -92,30 +123,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.175,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 28.0, vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MiniCapsuleBottomWidget(
-                          imgPath: 'assets/weather/atmosphere.png',
-                          txt1: "13 km/h",
-                          txt2: "wind"),
-                      MiniCapsuleBottomWidget(
-                          imgPath: 'assets/weather/cloud.png',
-                          txt1: "13 km/h",
-                          txt2: "wind"),
-                      MiniCapsuleBottomWidget(
-                          imgPath: 'assets/weather/clear.png',
-                          txt1: "13 km/h",
-                          txt2: "wind")
-                    ],
-                  ),
-                ),
-              )
+              WindHumidityPressureWidget()
             ],
           ),
         ),
@@ -124,9 +132,39 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class WindHumidityPressureWidget extends StatelessWidget {
+  const WindHumidityPressureWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.175,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MiniCapsuleBottomWidget(imgPath: 'assets/weather/atmosphere.png', txt1: "13 km/h", txt2: "Wind"),
+            MiniCapsuleBottomWidget(imgPath: 'assets/weather/clouds.png', txt1: "13 km/h", txt2: "Humidity"),
+            MiniCapsuleBottomWidget(imgPath: 'assets/weather/clear.png', txt1: "13 km/h", txt2: "Pressure")
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class TemperatureWidget extends StatelessWidget {
+  final int temp;
+  final String weatherCondition;
+  final DateTime dateTime;
   const TemperatureWidget({
     super.key,
+    required this.temp,
+    required this.weatherCondition,
+    required this.dateTime,
   });
 
   @override
@@ -137,15 +175,15 @@ class TemperatureWidget extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '21',
+                text: temp.toString(),
                 style: TextStyle(
-                  fontSize: 120,
+                  fontSize: MediaQuery.of(context).size.height * 0.1,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   shadows: [
                     Shadow(color: Colors.white, blurRadius: 6),
-                    Shadow(color: Colors.white, blurRadius: 24),
-                    Shadow(color: Colors.white70, blurRadius: 58),
+                    Shadow(color: Colors.white, blurRadius: 15),
+                    Shadow(color: Colors.white70, blurRadius: 32),
                   ],
                 ),
               ),
@@ -165,11 +203,11 @@ class TemperatureWidget extends StatelessWidget {
           ),
         ),
         Text(
-          'Thunderstorm',
+          weatherCondition,
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(
-          'Monday, 30 June',
+          AppHelper.dateToString(dateTime),
           style: TextStyle(fontSize: 14, color: Colors.white54),
         )
       ],
@@ -178,8 +216,10 @@ class TemperatureWidget extends StatelessWidget {
 }
 
 class ThreeDImageWidget extends StatelessWidget {
+  final String imgPath;
   const ThreeDImageWidget({
     super.key,
+    required this.imgPath,
   });
 
   @override
@@ -187,16 +227,16 @@ class ThreeDImageWidget extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: 80,
-          bottom: 55,
-          left: 30,
+          top: MediaQuery.of(context).size.height * 0.09,
+          bottom: MediaQuery.of(context).size.height * 0.03,
+          left: MediaQuery.of(context).size.height * 0.08,
           right: 5,
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
                   blurRadius: 50,
-                  color: Colors.black54,
+                  color: Colors.black45,
                 )
               ],
               borderRadius: BorderRadius.circular(80),
@@ -204,7 +244,7 @@ class ThreeDImageWidget extends StatelessWidget {
           ),
         ),
         Image.asset(
-          'assets/weather/atmosphere.png',
+          'assets/weather/${imgPath.toLowerCase()}.png',
           height: MediaQuery.of(context).size.height * 0.25,
         ),
       ],
