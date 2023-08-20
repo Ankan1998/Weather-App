@@ -11,7 +11,7 @@ class WeatherForecastViewModel {
 }
 
 class DayForecast {
-  int temp;
+  double temp;
   DateTime dtNow;
   String weatherCondition;
   double windSpeed;

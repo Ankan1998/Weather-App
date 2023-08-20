@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/models/ui_state_model.dart';
 import 'package:weather_app/models/weather_forecast_view_model.dart';
 import 'package:weather_app/pages/home_page/providers/current_weather_provider.dart';
+import 'package:weather_app/pages/home_page/widgets/animation_with_text_widget.dart';
 import 'package:weather_app/pages/home_page/widgets/mini_capsule_bottom_widget.dart';
 import 'package:weather_app/pages/home_page/widgets/mini_capsule_widget.dart';
 import 'package:weather_app/pages/home_page/widgets/temperature_widget.dart';
@@ -10,7 +11,6 @@ import 'package:weather_app/pages/home_page/widgets/three_day_forecast_widget.da
 import 'package:weather_app/pages/home_page/widgets/top_location_header.dart';
 import 'package:weather_app/utils/app_colors.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/utils/helpers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,8 +34,9 @@ class _HomePageState extends State<HomePage> {
         body: Center(
           child: Consumer<CurrentWeatherProvider>(builder: (context, provider, child) {
             if (provider.uiStateModel.states == UiStates.loading) {
-              return Center(
-                child: CircularProgressIndicator(),
+              return AnimationWithTitleWidget(
+                assetPath: 'assets/animations/weatherLoading.json',
+                bottomText: 'Fetching Weather....',
               );
             } else if (provider.uiStateModel.states == UiStates.success) {
               return Column(
@@ -122,23 +123,24 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ThreeDayForecastWidget(
                     day1WidgetModel: DayWidgetModel(
-                        temp: provider.currentWeatherViewModel.dayForecastList[1].temp,
+                        temp: provider.currentWeatherViewModel.dayForecastList[1].temp.ceil(),
                         dtNow: provider.currentWeatherViewModel.dayForecastList[1].dtNow,
                         weatherCondition: provider.currentWeatherViewModel.dayForecastList[1].weatherCondition),
                     day2WidgetModel: DayWidgetModel(
-                        temp: provider.currentWeatherViewModel.dayForecastList[2].temp,
+                        temp: provider.currentWeatherViewModel.dayForecastList[2].temp.ceil(),
                         dtNow: provider.currentWeatherViewModel.dayForecastList[2].dtNow,
                         weatherCondition: provider.currentWeatherViewModel.dayForecastList[2].weatherCondition),
                     day3WidgetModel: DayWidgetModel(
-                        temp: provider.currentWeatherViewModel.dayForecastList[3].temp,
+                        temp: provider.currentWeatherViewModel.dayForecastList[3].temp.ceil(),
                         dtNow: provider.currentWeatherViewModel.dayForecastList[3].dtNow,
                         weatherCondition: provider.currentWeatherViewModel.dayForecastList[3].weatherCondition),
                   )
                 ],
               );
             } else {
-              return Center(
-                child: Text("Something Went wrong"),
+              return AnimationWithTitleWidget(
+                assetPath: 'assets/animations/wrong.json',
+                bottomText: 'Something Failed!',
               );
             }
           }),

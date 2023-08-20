@@ -62,8 +62,11 @@ class AppHelper {
     return formattedDate;
   }
 
-  static double fahrenheitToCelsius(double fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9;
+  static double? fahrenheitToCelsius(double? fahrenheit) {
+    if (fahrenheit != null) {
+      return double.parse(((fahrenheit - 32) * 5 / 9).toStringAsFixed(1));
+    }
+    return null;
   }
 
   static String? weatherToAssetMapper(String? conditionCode) {
@@ -79,7 +82,7 @@ class AppHelper {
     if (weatherForecastDataModel?.days != null) {
       dayForecastList = weatherForecastDataModel!.days!.map((day) {
         return DayForecast(
-          temp: day.temp?.ceil() ?? 0,
+          temp: AppHelper.fahrenheitToCelsius(day.temp) ?? 0,
           dtNow: day.datetime ?? DateTime.now(),
           weatherCondition: weatherToAssetMapper(day.conditions) ?? 'atmosphere',
           windSpeed: day.windspeed ?? 0.0,

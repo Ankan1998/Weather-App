@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../utils/helpers.dart';
 
 class TemperatureWidget extends StatelessWidget {
-  final int temp;
+  final double temp;
   final String weatherCondition;
   final DateTime dateTime;
   const TemperatureWidget({

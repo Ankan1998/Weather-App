@@ -48,6 +48,7 @@ dev_dependencies:
   rive: ^0.11.14
   intl: ^0.18.1
   geocoding: ^2.1.0
+  lottie: ^2.6.0
   slide_to_act:
     git:
       url: https://github.com/muhammadtalhasultan/flutter-slide-to-act
@@ -83,6 +84,7 @@ flutter:
   assets:
     - assets/weather/
     - assets/misc/
+    - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

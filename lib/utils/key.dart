@@ -1,3 +1,3 @@
 class ApiKey {
-  static const String visualCrossingApiKey = 'DHRHGK49K44S84UTTGL2T83FU';
+  static const String visualCrossingApiKey = 'GGN77TRDG2EW4DWAF8MTRBNQUx';
 }
