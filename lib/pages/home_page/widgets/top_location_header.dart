@@ -50,7 +50,7 @@ class TopLocationHeader extends StatelessWidget {
                 ),
                 Text(
                   cityName,
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),
                 ),
               ],
             ),

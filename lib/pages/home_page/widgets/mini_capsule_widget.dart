@@ -14,15 +14,18 @@ class MiniCapsuleWidget extends StatelessWidget {
           Center(
             child: Image.asset(
               imgPath,
-              width: 38,
+              width: MediaQuery.of(context).size.height * 0.05,
             ),
           ),
           SizedBox(
-            height: 4,
+            height: 6,
           ),
           Text(
             txt1,
             style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
+          SizedBox(
+            height: 4,
           ),
           Text(
             txt2,

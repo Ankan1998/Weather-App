@@ -5,9 +5,7 @@ class MiniCapsuleBottomWidget extends StatelessWidget {
   final String imgPath;
   final String txt1;
   final String txt2;
-  const MiniCapsuleBottomWidget(
-      {Key? key, required this.imgPath, required this.txt1, required this.txt2})
-      : super(key: key);
+  const MiniCapsuleBottomWidget({Key? key, required this.imgPath, required this.txt1, required this.txt2}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class MiniCapsuleBottomWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                txt1,
+                txt1 + " c",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               Center(
