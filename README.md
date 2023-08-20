@@ -16,7 +16,7 @@ To run this app on your local machine, make sure you have Flutter installed. If 
 1. Clone this repository:
 
    ```sh
-   git clone https://github.com/yourusername/flutter-weather-app.git
+   git clone <Git-link>
    flutter pub get
    flutter run
 
